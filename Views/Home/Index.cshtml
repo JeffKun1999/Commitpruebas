@@ -1,4 +1,6 @@
-﻿
+﻿@using System.Linq
+@model IEnumerable<TacoslaEnredada_JRMJSC.Models.Productos>
+
 @{
     ViewData["Title"] = "Home Page";
     var imagenesProductos = ViewBag.ImagenesProductos as List<string>;
@@ -52,35 +54,49 @@
 
 <h1>Productos</h1>
 
-foreach (var item in Model.Select((producto, index) => new { Producto = producto, Index = index }))
-{
-    <tr>
-        <td>
-            Html.DisplayFor(modelItem => item.Producto.Nombre)
-        </td>
-        <td>
-            Html.DisplayFor(modelItem => item.Producto.Descripcion)
-        </td>
-        <td>
-            Html.DisplayFor(modelItem => item.Producto.Precio)
-        </td>
-        <td>
-            Html.DisplayFor(modelItem => item.Producto.Ingredientes)
-        </td>
-        <td>
-            if (imagenesProductos != null && item.Index < imagenesProductos.Count)
-            {
-                <img src="imagenesProductos[item.Index]" alt="Product Image">
-            }
-            else
-            {
-                <span>No Image</span>
-            }
-        </td>
-        <td>
-            <a asp-action="Edit" asp-route-id="item.Producto.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="item.Producto.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="item.Producto.Id">Delete</a>
-        </td>
-    </tr>
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Ingredientes</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Select((producto, index) => new { Producto = producto, Index = index }))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Ingredientes)
+                </td>
+                <td>
+                    @if (imagenesProductos != null && item.Index < imagenesProductos.Count)
+                    {
+                        <img src="@imagenesProductos[item.Index]" alt="Product Image" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Producto.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Producto.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Producto.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
